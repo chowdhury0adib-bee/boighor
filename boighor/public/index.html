@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BoiGhor — Secondhand Book Marketplace for Students</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="site"><div class="wrap" id="siteNav"></div></header>
+
+<main class="wrap" id="main">
+  <section class="hero" id="hero">
+    <!-- Decorative background layer (parallaxed by JS) -->
+    <div class="hero-bg" aria-hidden="true">
+      <div class="hero-bg-blob hero-bg-blob--1" data-parallax="0.18"></div>
+      <div class="hero-bg-blob hero-bg-blob--2" data-parallax="0.28"></div>
+      <div class="hero-bg-blob hero-bg-blob--3" data-parallax="0.12"></div>
+      <div class="hero-bg-grain"></div>
+      <svg class="hero-bg-grid" viewBox="0 0 1200 800" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <pattern id="heroDots" x="0" y="0" width="22" height="22" patternUnits="userSpaceOnUse">
+            <circle cx="1" cy="1" r="1" fill="currentColor" opacity=".18"/>
+          </pattern>
+        </defs>
+        <rect width="1200" height="800" fill="url(#heroDots)"/>
+      </svg>
+    </div>
+
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <span class="eyebrow hero-eyebrow">
+          <span class="hero-eyebrow-dot"></span>
+          Est. for students, by students
+        </span>
+        <h1 class="hero-title">
+          <span class="hero-title-line">Give your old books</span>
+          <span class="hero-title-line hero-title-accent">a <em>second</em> reader.</span>
+        </h1>
+        <p class="hero-sub">
+          The campus marketplace where textbooks find new owners and students keep more cash.
+          Browse <strong>hundreds of listings</strong> nearby — or turn your shelf into someone else's start.
+        </p>
+        <div class="hero-actions">
+          <a href="#bookGrid" class="btn large hero-cta hero-cta--primary">
+            <span>Browse Listings</span>
+            <svg class="hero-cta-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+            <span class="hero-cta-pulse" aria-hidden="true"></span>
+          </a>
+          <a href="/sell.html" class="btn large hero-cta hero-cta--ghost">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            <span>Sell a Book</span>
+          </a>
+        </div>
+        <div class="hero-trust">
+          <div class="hero-trust-avatars" aria-hidden="true">
+            <span class="hero-avatar" style="--a-bg:linear-gradient(135deg,#d3a12b,#b0432c);">A</span>
+            <span class="hero-avatar" style="--a-bg:linear-gradient(135deg,#23402f,#2f5240);">M</span>
+            <span class="hero-avatar" style="--a-bg:linear-gradient(135deg,#b0432c,#d3a12b);">S</span>
+            <span class="hero-avatar" style="--a-bg:linear-gradient(135deg,#16281c,#23402f);">R</span>
+            <span class="hero-avatar hero-avatar--more">+</span>
+          </div>
+          <div class="hero-trust-text">
+            <strong>Trusted by <span id="heroStatStudents">—</span> students</strong>
+            <small>across <span id="heroStatBooks">—</span> active listings — list yours in 60 seconds</small>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <strong id="heroStatBooksNum">—</strong>
+            <small>books listed</small>
+          </div>
+          <div class="hero-stat">
+            <strong id="heroStatStudentsNum">—</strong>
+            <small>students trading</small>
+          </div>
+          <div class="hero-stat hero-stat--accent">
+            <strong>Free</strong>
+            <small>to list a book</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating book illustration composition (parallaxed) -->
+      <div class="hero-art" aria-hidden="true">
+        <div class="hero-book hero-book--main" data-parallax="0.22">
+          <div class="hero-book-spine"></div>
+          <div class="hero-book-cover">
+            <span class="hero-book-title">BoiGhor</span>
+            <span class="hero-book-sub">campus · reads · reuse</span>
+          </div>
+        </div>
+        <div class="hero-book hero-book--top" data-parallax="0.36">
+          <div class="hero-book-cover">
+            <span>📚</span>
+          </div>
+        </div>
+        <div class="hero-book hero-book--bottom" data-parallax="0.30">
+          <div class="hero-book-cover">
+            <span>📖</span>
+          </div>
+        </div>
+        <div class="hero-book hero-book--back" data-parallax="0.14">
+          <div class="hero-book-cover">
+            <span>✨</span>
+          </div>
+        </div>
+        <!-- Floating tags -->
+        <span class="hero-tag hero-tag--1" data-parallax="0.40">Academic</span>
+        <span class="hero-tag hero-tag--2" data-parallax="0.32">Novel</span>
+        <span class="hero-tag hero-tag--3" data-parallax="0.28">Reference</span>
+        <span class="hero-tag hero-tag--4" data-parallax="0.46">Comics</span>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <a href="#bookGrid" class="hero-scroll" aria-label="Scroll to listings">
+      <span class="hero-scroll-label">Scroll</span>
+      <span class="hero-scroll-line"><span class="hero-scroll-dot"></span></span>
+    </a>
+  </section>
+
+  <div class="search-shell" id="searchShell">
+    <!-- Large primary search input (Google-style) -->
+    <div class="search-box" id="searchBox" data-focus="false">
+      <span class="search-icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </span>
+      <input
+        type="text"
+        id="fSearch"
+        class="search-input"
+        placeholder="Search books by title or author..."
+        autocomplete="off"
+        spellcheck="false"
+        aria-label="Search books"
+        aria-autocomplete="list"
+        aria-controls="searchSuggest"
+        aria-expanded="false"
+      >
+      <button class="search-clear" id="searchClear" type="button" aria-label="Clear search" hidden>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+      <span class="search-spinner" id="searchSpinner" aria-hidden="true"></span>
+      <button class="search-btn" id="applyFilters" type="button">
+        <span>Search</span>
+        <kbd class="search-kbd" aria-hidden="true">↵</kbd>
+      </button>
+
+      <!-- Autocomplete suggestions -->
+      <div class="search-suggest" id="searchSuggest" role="listbox" hidden></div>
+    </div>
+
+    <!-- Quick-filter category chips (Google-style pill row) -->
+    <div class="search-chips" id="searchChips" role="tablist" aria-label="Quick categories">
+      <button class="chip-tab is-active" data-cat="" role="tab" aria-selected="true">
+        <span class="chip-tab-ico">✨</span><span>All</span>
+      </button>
+      <button class="chip-tab" data-cat="Academic" role="tab" aria-selected="false">
+        <span class="chip-tab-ico">📚</span><span>Academic</span>
+      </button>
+      <button class="chip-tab" data-cat="Novel" role="tab" aria-selected="false">
+        <span class="chip-tab-ico">📖</span><span>Novels</span>
+      </button>
+      <button class="chip-tab" data-cat="Reference" role="tab" aria-selected="false">
+        <span class="chip-tab-ico">📕</span><span>Reference</span>
+      </button>
+      <button class="chip-tab" data-cat="Comics" role="tab" aria-selected="false">
+        <span class="chip-tab-ico">💥</span><span>Comics</span>
+      </button>
+      <button class="chip-tab" data-cat="Others" role="tab" aria-selected="false">
+        <span class="chip-tab-ico">🎲</span><span>Others</span>
+      </button>
+    </div>
+
+    <!-- Advanced filters (collapsed by default) -->
+    <div class="search-advanced" id="searchAdvanced" data-open="false">
+      <button class="adv-toggle" id="advToggle" type="button" aria-expanded="false" aria-controls="advPanel">
+        <svg class="adv-toggle-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="4" y1="6" x2="20" y2="6"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/>
+        </svg>
+        <span>More filters</span>
+        <span class="adv-toggle-caret" aria-hidden="true">▾</span>
+      </button>
+      <div class="adv-panel" id="advPanel" role="region" aria-label="Advanced filters">
+        <label class="adv-field">
+          <span>Category</span>
+          <select id="fCategory">
+            <option value="">All</option>
+            <option value="Academic">Academic</option>
+            <option value="Novel">Novel</option>
+            <option value="Reference">Reference</option>
+            <option value="Comics">Comics</option>
+            <option value="Others">Others</option>
+          </select>
+        </label>
+        <label class="adv-field">
+          <span>Condition</span>
+          <select id="fCondition">
+            <option value="">Any</option>
+            <option value="New">New</option>
+            <option value="Good">Good</option>
+            <option value="Fair">Fair</option>
+          </select>
+        </label>
+        <label class="adv-field adv-field--price">
+          <span>Price range (Tk)</span>
+          <span class="adv-price-row">
+            <input type="number" id="fMin" placeholder="Min" min="0">
+            <span class="adv-price-sep" aria-hidden="true">—</span>
+            <input type="number" id="fMax" placeholder="Max" min="0">
+          </span>
+        </label>
+        <label class="adv-field">
+          <span>Sort by</span>
+          <select id="fSort" title="Sort">
+            <option value="newest">Newest first</option>
+            <option value="price_asc">Price: Low → High</option>
+            <option value="price_desc">Price: High → Low</option>
+            <option value="title">Title A→Z</option>
+          </select>
+        </label>
+        <button class="adv-clear btn secondary" id="clearFilters" type="button" title="Clear all filters">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+          Reset
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="activeChips" class="chips"></div>
+
+  <p id="resultMeta" class="result-meta" aria-live="polite" hidden></p>
+
+  <div id="bookGrid" class="grid"></div>
+  <div id="emptyState" class="empty" style="display:none">
+    <svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true">
+      <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".55">
+        <rect x="22" y="28" width="40" height="62" rx="2"/>
+        <rect x="36" y="18" width="40" height="62" rx="2" fill="#faf6ec"/>
+        <rect x="50" y="34" width="40" height="62" rx="2" fill="#f1ead9"/>
+        <line x1="58" y1="48" x2="82" y2="48"/>
+        <line x1="58" y1="56" x2="80" y2="56"/>
+        <line x1="58" y1="64" x2="82" y2="64"/>
+        <line x1="58" y1="72" x2="76" y2="72"/>
+        <circle cx="92" cy="92" r="10" fill="#faf6ec"/>
+        <line x1="100" y1="100" x2="108" y2="108"/>
+      </g>
+    </svg>
+    <h3>No books match your search</h3>
+    <p>Try a different keyword, broaden your filters, or be the first to list one!</p>
+    <div class="empty-actions">
+      <button class="btn" type="button" id="emptySellBtn">List a Book</button>
+      <button class="btn secondary" type="button" id="emptyClearBtn">Clear Filters</button>
+    </div>
+  </div>
+</main>
+
+<footer class="site"><div class="wrap" id="siteFooter"></div></footer>
+
+<script src="/js/common.js"></script>
+<script src="/js/index.js"></script>
+</body>
+</html>

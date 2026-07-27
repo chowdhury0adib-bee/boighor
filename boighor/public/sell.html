@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sell a Book — BoiGhor</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="site"><div class="wrap" id="siteNav"></div></header>
+
+<main class="wrap" style="padding-top:40px;">
+  <div class="page-head" style="text-align:center; border:none;">
+    <span class="eyebrow">List a listing</span>
+    <h1>Put your book up for sale</h1>
+    <p style="margin:0 auto;">Fill in the details below — it takes less than a minute.</p>
+  </div>
+
+  <form class="card-form wide" id="sellForm" enctype="multipart/form-data">
+    <div class="row-2">
+      <div class="field">
+        <label for="title">Book Title *</label>
+        <input type="text" id="title" required>
+      </div>
+      <div class="field">
+        <label for="author">Author</label>
+        <input type="text" id="author">
+      </div>
+    </div>
+    <div class="row-2">
+      <div class="field">
+        <label for="category">Category</label>
+        <select id="category">
+          <option value="Academic">Academic</option>
+          <option value="Novel">Novel</option>
+          <option value="Reference">Reference</option>
+          <option value="Comics">Comics</option>
+          <option value="Others">Others</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="condition_status">Condition</label>
+        <select id="condition_status">
+          <option value="New">New</option>
+          <option value="Good" selected>Good</option>
+          <option value="Fair">Fair</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label for="price">Price (Tk) *</label>
+      <input type="number" id="price" min="0" required>
+    </div>
+    <div class="field">
+      <label for="description">Description</label>
+      <textarea id="description" placeholder="Edition, highlighted pages, why you're selling it, etc."></textarea>
+    </div>
+    <div class="field">
+      <label for="image">Cover Photo</label>
+      <input type="file" id="image" accept="image/png, image/jpeg, image/webp">
+      <div id="imagePreviewWrap" class="img-preview-wrap" hidden>
+        <img id="imagePreview" alt="Cover preview">
+        <button type="button" class="img-preview-clear" id="imagePreviewClear" aria-label="Remove image">×</button>
+      </div>
+    </div>
+    <button class="btn" type="submit" style="width:100%; justify-content:center;">List This Book</button>
+    <div class="form-msg" id="msg"></div>
+  </form>
+</main>
+
+<footer class="site"><div class="wrap" id="siteFooter"></div></footer>
+
+<script src="/js/common.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  const user = await initLayout();
+  if (!user) { window.location.href = '/login.html'; return; }
+
+  // ---- Image preview ----
+  const fileInput = document.getElementById('image');
+  const previewWrap = document.getElementById('imagePreviewWrap');
+  const previewImg = document.getElementById('imagePreview');
+  const clearBtn = document.getElementById('imagePreviewClear');
+
+  fileInput.addEventListener('change', () => {
+    const f = fileInput.files[0];
+    if (!f) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      previewImg.src = ev.target.result;
+      previewWrap.hidden = false;
+      previewWrap.classList.add('pop-in');
+    };
+    reader.readAsDataURL(f);
+  });
+
+  clearBtn.addEventListener('click', () => {
+    fileInput.value = '';
+    previewImg.src = '';
+    previewWrap.hidden = true;
+    previewWrap.classList.remove('pop-in');
+  });
+
+  // ---- Submit ----
+  const form = document.getElementById('sellForm');
+  const submitBtn = form.querySelector('button[type="submit"]');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msg = document.getElementById('msg');
+    msg.className = 'form-msg';
+    msg.textContent = '';
+
+    const fd = new FormData();
+    fd.append('title', document.getElementById('title').value);
+    fd.append('author', document.getElementById('author').value);
+    fd.append('category', document.getElementById('category').value);
+    fd.append('condition_status', document.getElementById('condition_status').value);
+    fd.append('price', document.getElementById('price').value);
+    fd.append('description', document.getElementById('description').value);
+    const imgFile = fileInput.files[0];
+    if (imgFile) fd.append('image', imgFile);
+
+    submitBtn.classList.add('btn-loading');
+    submitBtn.disabled = true;
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Listing…';
+
+    try {
+      const res = await fetch('/api/books', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to list book.');
+      toast('Book listed successfully!', 'success');
+      setTimeout(() => { window.location.href = '/dashboard.html'; }, 600);
+    } catch (err) {
+      msg.textContent = err.message;
+      msg.classList.add('error');
+      toast(err.message, 'error');
+    } finally {
+      submitBtn.classList.remove('btn-loading');
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalText;
+    }
+  });
+});
+</script>
+</body>
+</html>

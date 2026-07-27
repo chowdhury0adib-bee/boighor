@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — BoiGhor</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="site"><div class="wrap" id="siteNav"></div></header>
+
+<main class="wrap" style="padding-top:40px;">
+  <div class="page-head" style="text-align:center; border:none;">
+    <span class="eyebrow">Welcome back</span>
+    <h1>Log in to BoiGhor</h1>
+  </div>
+
+  <form class="card-form" id="loginForm">
+    <div class="field">
+      <label for="email">Email</label>
+      <input type="email" id="email" required>
+    </div>
+    <div class="field">
+      <label for="password">Password</label>
+      <input type="password" id="password" required>
+    </div>
+    <button class="btn" type="submit" style="width:100%; justify-content:center;">Log In</button>
+    <div class="form-msg" id="msg"></div>
+    <p style="text-align:center; margin-top:16px; font-size:.9rem;">
+      New to BoiGhor? <a href="/signup.html" style="color:var(--rust); font-weight:600;">Create an account</a>
+    </p>
+    <p style="text-align:center; font-size:.78rem; color:#8a806a;">
+      Admin demo login — admin@boighor.com / admin123
+    </p>
+  </form>
+</main>
+
+<footer class="site"><div class="wrap" id="siteFooter"></div></footer>
+
+<script src="/js/common.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  await initLayout();
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msg = document.getElementById('msg');
+    msg.className = 'form-msg';
+    try {
+      const { user } = await api('/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: document.getElementById('email').value,
+          password: document.getElementById('password').value
+        })
+      });
+      window.location.href = user.role === 'admin' ? '/admin.html' : '/';
+    } catch (err) {
+      msg.textContent = err.message;
+      msg.classList.add('error');
+    }
+  });
+});
+</script>
+</body>
+</html>

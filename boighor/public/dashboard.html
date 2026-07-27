@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — BoiGhor</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="site"><div class="wrap" id="siteNav"></div></header>
+
+<main class="wrap dash" id="main">
+
+  <!-- ===================== HERO / GREETING ===================== -->
+  <section class="dash-hero reveal-fade" aria-labelledby="greet">
+    <div class="dash-hero-left">
+      <span class="eyebrow"><span class="eyebrow-dot"></span> Your dashboard</span>
+      <h1 id="greet">Welcome back, <span id="greetName">there</span></h1>
+      <p class="dash-hero-sub" id="dashHeroSub">Here's a snapshot of your activity on BoiGhor.</p>
+    </div>
+    <div class="dash-hero-right" aria-hidden="true">
+      <div class="dash-hero-art">
+        <span class="dash-art-blob dash-art-blob--1"></span>
+        <span class="dash-art-blob dash-art-blob--2"></span>
+        <span class="dash-art-blob dash-art-blob--3"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== KPI STRIP ===================== -->
+  <section class="kpi-strip" aria-label="Key stats">
+    <article class="kpi kpi--listings" data-kpi="listings">
+      <span class="kpi-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </span>
+      <div class="kpi-body">
+        <span class="kpi-label">My Listings</span>
+        <span class="kpi-value" id="kpiListings">—</span>
+        <span class="kpi-trend" id="kpiListingsTrend">&nbsp;</span>
+      </div>
+    </article>
+
+    <article class="kpi kpi--orders" data-kpi="orders">
+      <span class="kpi-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      </span>
+      <div class="kpi-body">
+        <span class="kpi-label">Orders Received</span>
+        <span class="kpi-value" id="kpiOrders">—</span>
+        <span class="kpi-trend" id="kpiOrdersTrend">&nbsp;</span>
+      </div>
+    </article>
+
+    <article class="kpi kpi--purchases" data-kpi="purchases">
+      <span class="kpi-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+      </span>
+      <div class="kpi-body">
+        <span class="kpi-label">Purchases</span>
+        <span class="kpi-value" id="kpiPurchases">—</span>
+        <span class="kpi-trend" id="kpiPurchasesTrend">&nbsp;</span>
+      </div>
+    </article>
+
+    <article class="kpi kpi--wishlist" data-kpi="wishlist">
+      <span class="kpi-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </span>
+      <div class="kpi-body">
+        <span class="kpi-label">Wishlist</span>
+        <span class="kpi-value" id="kpiWishlist">—</span>
+        <span class="kpi-trend" id="kpiWishlistTrend">&nbsp;</span>
+      </div>
+    </article>
+
+    <article class="kpi kpi--revenue" data-kpi="revenue">
+      <span class="kpi-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </span>
+      <div class="kpi-body">
+        <span class="kpi-label">Revenue (completed)</span>
+        <span class="kpi-value" id="kpiRevenue">—</span>
+        <span class="kpi-trend" id="kpiRevenueTrend">&nbsp;</span>
+      </div>
+    </article>
+  </section>
+
+  <!-- ===================== CHARTS ===================== -->
+  <section class="dash-charts" aria-label="Activity charts">
+
+    <article class="card chart-card chart-card--donut">
+      <header class="card-head">
+        <h2>Listings mix</h2>
+        <p>How your books split by status.</p>
+      </header>
+      <div class="donut-wrap">
+        <svg class="donut" id="donutListings" viewBox="0 0 120 120" aria-label="Listings by status">
+          <circle cx="60" cy="60" r="48" class="donut-track"></circle>
+          <g id="donutListingsSlices"></g>
+          <text x="60" y="58" class="donut-mid-num" id="donutMidNum">0</text>
+          <text x="60" y="74" class="donut-mid-label">books</text>
+        </svg>
+        <ul class="donut-legend" id="donutListingsLegend"></ul>
+      </div>
+    </article>
+
+    <article class="card chart-card chart-card--bar">
+      <header class="card-head">
+        <h2>Activity (last 8 weeks)</h2>
+        <p>Orders you received vs purchases you made.</p>
+      </header>
+      <svg class="bar-chart" id="barActivity" viewBox="0 0 360 180" preserveAspectRatio="none" aria-label="Weekly activity"></svg>
+      <ul class="bar-legend">
+        <li><span class="bar-swatch bar-swatch--received"></span>Received</li>
+        <li><span class="bar-swatch bar-swatch--purchases"></span>Purchases</li>
+      </ul>
+    </article>
+  </section>
+
+  <!-- ===================== TABS ===================== -->
+  <section class="dash-tabs">
+    <nav class="tab-bar" role="tablist" aria-label="Dashboard sections">
+      <button class="tab-btn active" role="tab" aria-selected="true" data-tab="listings">
+        <span class="tab-btn-ico" aria-hidden="true">📚</span><span>My Listings</span>
+      </button>
+      <button class="tab-btn" role="tab" aria-selected="false" data-tab="orders-received">
+        <span class="tab-btn-ico" aria-hidden="true">📥</span><span>Orders Received</span>
+        <span class="tab-btn-count" id="tabBadgeOrders" hidden>0</span>
+      </button>
+      <button class="tab-btn" role="tab" aria-selected="false" data-tab="purchases">
+        <span class="tab-btn-ico" aria-hidden="true">🛒</span><span>My Purchases</span>
+      </button>
+      <button class="tab-btn" role="tab" aria-selected="false" data-tab="wishlist">
+        <span class="tab-btn-ico" aria-hidden="true">♡</span><span>Wishlist</span>
+        <span class="tab-btn-count" id="tabBadgeWishlist" hidden>0</span>
+      </button>
+    </nav>
+
+    <!-- Mobile select fallback -->
+    <label class="tab-select-wrap" hidden>
+      <span class="sr-only">Section</span>
+      <select id="tabSelect" aria-label="Dashboard section">
+        <option value="listings">My Listings</option>
+        <option value="orders-received">Orders Received</option>
+        <option value="purchases">My Purchases</option>
+        <option value="wishlist">Wishlist</option>
+      </select>
+    </label>
+
+    <div class="tab-panels">
+      <div class="tab-panel active" id="tab-listings" role="tabpanel"></div>
+      <div class="tab-panel" id="tab-orders-received" role="tabpanel"></div>
+      <div class="tab-panel" id="tab-purchases" role="tabpanel"></div>
+      <div class="tab-panel" id="tab-wishlist" role="tabpanel"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site"><div class="wrap" id="siteFooter"></div></footer>
+
+<script src="/js/common.js"></script>
+<script src="/js/dashboard.js"></script>
+</body>
+</html>

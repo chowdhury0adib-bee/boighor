@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — BoiGhor</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="site"><div class="wrap" id="siteNav"></div></header>
+
+<main class="wrap" style="padding-top:36px;">
+  <div class="page-head">
+    <span class="eyebrow">Admin</span>
+    <h1>Control Panel</h1>
+  </div>
+
+  <div class="stats" id="statsRow"></div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="users">Users</button>
+    <button class="tab-btn" data-tab="listings">All Listings</button>
+  </div>
+
+  <div class="tab-panel active" id="tab-users"></div>
+  <div class="tab-panel" id="tab-listings"></div>
+</main>
+
+<footer class="site"><div class="wrap" id="siteFooter"></div></footer>
+
+<script src="/js/common.js"></script>
+<script src="/js/admin.js"></script>
+</body>
+</html>
