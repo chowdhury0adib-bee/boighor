@@ -4,18 +4,81 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Book Details — BoiGhor</title>
+<meta name="description" content="View book details, seller profile, reviews and more on BoiGhor — the student-to-student marketplace.">
+<meta name="theme-color" content="#16281c">
+<meta name="color-scheme" content="light dark">
+<meta property="og:type" content="product">
+<meta property="og:title" content="Book Details — BoiGhor">
+<meta property="og:description" content="Buy and sell secondhand textbooks on the student marketplace.">
+<link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
+<link rel="apple-touch-icon" href="/img/favicon.svg">
 <link rel="stylesheet" href="/css/style.css">
 </head>
-<body>
+<body class="bd-body">
 
 <header class="site"><div class="wrap" id="siteNav"></div></header>
 
-<main class="wrap" style="padding-top:36px;">
-  <div id="content"></div>
+<main id="main" class="bd-page">
+
+  <!-- Skeleton while loading -->
+  <div class="bd-skeleton" id="bdSkeleton" hidden>
+    <div class="bd-skel-hero">
+      <div class="skeleton skel-block skel-lg"></div>
+      <div class="bd-skel-info">
+        <div class="skeleton skel-line skel-w-30"></div>
+        <div class="skeleton skel-line skel-w-80"></div>
+        <div class="skeleton skel-line skel-w-60"></div>
+        <div class="skeleton skel-block skel-md"></div>
+        <div class="skeleton skel-line skel-w-40"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actual content (rendered by book-detail.js) -->
+  <div id="bdContent" hidden></div>
+
+  <!-- Error state -->
+  <div class="bd-empty" id="bdError" hidden>
+    <div class="bd-empty-card">
+      <span class="bd-empty-emoji" aria-hidden="true">📕</span>
+      <h2 id="bdErrorTitle">Couldn't load this book</h2>
+      <p id="bdErrorMsg">It may have been removed, or the link is wrong.</p>
+      <a class="btn primary" href="/">Back to browse</a>
+    </div>
+  </div>
+
 </main>
 
 <footer class="site"><div class="wrap" id="siteFooter"></div></footer>
 
+<!-- Lightbox -->
+<div class="lightbox" id="bdLightbox" hidden role="dialog" aria-modal="true" aria-labelledby="bdLightboxCaption">
+  <button class="lightbox-close" type="button" aria-label="Close image">×</button>
+  <figure class="lightbox-figure">
+    <img id="bdLightboxImg" alt="">
+    <figcaption id="bdLightboxCaption"></figcaption>
+  </figure>
+</div>
+
+<!-- Message-seller modal -->
+<div class="modal-overlay" id="bdMsgModal" hidden role="dialog" aria-modal="true" aria-labelledby="bdMsgTitle">
+  <div class="modal modal-msg">
+    <button class="modal-close" type="button" aria-label="Close" data-act="cancel">×</button>
+    <h3 id="bdMsgTitle">Message the seller</h3>
+    <p class="modal-msg-intro" id="bdMsgIntro">Send a quick note about <strong id="bdMsgBookTitle"></strong>.</p>
+    <div class="field">
+      <label class="field-label" for="bdMsgBody">Your message</label>
+      <textarea id="bdMsgBody" class="field-textarea" rows="5" placeholder="Hi! Is this book still available? I'd love to arrange a pickup…"></textarea>
+      <small class="field-help">Be polite. Mention condition, meetup, and price.</small>
+    </div>
+    <div class="modal-actions">
+      <button class="btn ghost" type="button" data-act="cancel">Cancel</button>
+      <button class="btn primary" type="button" id="bdMsgSendBtn">Send message</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
 <script src="/js/common.js"></script>
 <script src="/js/book-detail.js"></script>
 </body>

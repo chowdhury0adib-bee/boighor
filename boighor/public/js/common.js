@@ -19,6 +19,89 @@ function brandHtml() {
   `;
 }
 
+// =============================================================
+// THEME (light/dark/auto) — applied ASAP so the first paint is correct
+// =============================================================
+const THEME_KEY = 'boighor:theme'; // 'light' | 'dark' | 'auto'
+const VALID_THEMES = ['light', 'dark', 'auto'];
+
+function getStoredTheme() {
+  try {
+    const v = localStorage.getItem(THEME_KEY);
+    return VALID_THEMES.includes(v) ? v : 'auto';
+  } catch { return 'auto'; }
+}
+function setStoredTheme(v) {
+  try { localStorage.setItem(THEME_KEY, v); } catch {}
+}
+function getOSTheme() {
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+    ? 'dark' : 'light';
+}
+
+// Apply theme to <html> / <body> as early as possible to avoid flash.
+function applyTheme(theme, { animate = false } = {}) {
+  const t = VALID_THEMES.includes(theme) ? theme : 'auto';
+  const resolved = t === 'auto' ? getOSTheme() : t;
+  if (animate) {
+    document.body.classList.add('theme-switching');
+    setTimeout(() => document.body.classList.remove('theme-switching'), 320);
+  }
+  document.documentElement.setAttribute('data-theme', t);
+  document.body.setAttribute('data-theme', t);
+  document.body.setAttribute('data-os-theme', resolved);
+  // Sync the toggle button's aria-label if it exists
+  const btn = document.getElementById('themeToggle');
+  if (btn) {
+    const next = t === 'auto' ? 'auto' : (t === 'dark' ? 'dark' : 'light');
+    btn.setAttribute('data-current', next);
+    btn.setAttribute('aria-label',
+      t === 'auto'  ? 'Theme: auto (follows system). Click to switch to light.'
+    : t === 'dark'  ? 'Theme: dark. Click to switch to light.'
+                     : 'Theme: light. Click to switch to dark.');
+    btn.setAttribute('title', btn.getAttribute('aria-label'));
+  }
+}
+
+function cycleTheme() {
+  const cur = getStoredTheme();
+  // light -> dark -> auto -> light
+  const next = cur === 'light' ? 'dark' : cur === 'dark' ? 'auto' : 'light';
+  setStoredTheme(next);
+  applyTheme(next, { animate: true });
+  toast(
+    next === 'auto'  ? 'Theme: auto (follows your system)' :
+    next === 'dark'  ? 'Theme: dark' :
+                       'Theme: light',
+    'info', 1500
+  );
+}
+
+function themeToggleHtml() {
+  return `
+    <button type="button" id="themeToggle" class="theme-toggle"
+            aria-label="Toggle theme" title="Toggle theme">
+      <svg class="sun" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"/>
+        <line x1="12" y1="2" x2="12" y2="4"/>
+        <line x1="12" y1="20" x2="12" y2="22"/>
+        <line x1="4.93" y1="4.93" x2="6.34" y2="6.34"/>
+        <line x1="17.66" y1="17.66" x2="19.07" y2="19.07"/>
+        <line x1="2" y1="12" x2="4" y2="12"/>
+        <line x1="20" y1="12" x2="22" y2="12"/>
+        <line x1="4.93" y1="19.07" x2="6.34" y2="17.66"/>
+        <line x1="17.66" y1="6.34" x2="19.07" y2="4.93"/>
+      </svg>
+      <svg class="moon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+  `;
+}
+
+// Apply earliest theme — runs as a top-level statement when common.js loads.
+applyTheme(getStoredTheme());
+
 function renderHeader(activeUser) {
   const headerEl = document.querySelector('header.site');
   const nav = document.getElementById('siteNav');
@@ -55,6 +138,7 @@ function renderHeader(activeUser) {
 
     rightHTML = `
       <a href="/sell.html" class="nav-cta">+ Sell a Book</a>
+      ${themeToggleHtml()}
       <div class="nav-dropdown" id="navDropdown">
         <button class="nav-trigger" id="navTrigger" aria-haspopup="menu" aria-expanded="false">
           <span class="nav-avatar">${initial}</span>
@@ -85,6 +169,7 @@ function renderHeader(activeUser) {
     rightHTML = `
       <a href="/login.html" class="nav-link">Login</a>
       <a href="/signup.html" class="nav-cta">Sign Up</a>
+      ${themeToggleHtml()}
     `;
   }
 
@@ -145,6 +230,13 @@ function renderHeader(activeUser) {
       await api('/api/auth/logout', { method: 'POST' });
       window.location.href = '/';
     });
+  }
+
+  // ---- Theme toggle ----
+  const themeBtn = document.getElementById('themeToggle');
+  if (themeBtn) {
+    applyTheme(getStoredTheme()); // sync aria-label to current state
+    themeBtn.addEventListener('click', cycleTheme);
   }
 
   // ---- Account dropdown (click + hover) ----
@@ -317,7 +409,8 @@ async function initLayout() {
 }
 
 // IntersectionObserver-based scroll reveal (purely additive — does not break layout)
-function setupScrollReveal() {
+// Exposed on window so per-page renderers can re-run it after injecting new DOM.
+window.setupScrollReveal = function setupScrollReveal() {
   if (!('IntersectionObserver' in window)) return;
   const els = document.querySelectorAll('.reveal-up, .reveal-fade, .reveal');
   if (!els.length) return;
@@ -326,6 +419,15 @@ function setupScrollReveal() {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('is-visible');
+        // Auto-stagger direct children that opted in via .reveal-stagger
+        if (entry.target.classList.contains('reveal-stagger')) {
+          Array.from(entry.target.children).forEach((child, i) => {
+            child.style.setProperty('--i', i);
+            if (!child.classList.contains('reveal-up') && !child.classList.contains('reveal-fade')) {
+              child.classList.add('reveal-up');
+            }
+          });
+        }
         io.unobserve(entry.target);
       }
     });
@@ -460,4 +562,16 @@ function debounce(fn, wait = 250) {
     clearTimeout(t);
     t = setTimeout(() => fn.apply(this, args), wait);
   };
+}
+
+// ---------- React to OS theme changes (only if user is on 'auto') ----------
+if (window.matchMedia) {
+  const mq = window.matchMedia('(prefers-color-scheme: dark)');
+  const handler = (e) => {
+    if (getStoredTheme() === 'auto') {
+      document.body.setAttribute('data-os-theme', e.matches ? 'dark' : 'light');
+    }
+  };
+  if (mq.addEventListener) mq.addEventListener('change', handler);
+  else if (mq.addListener) mq.addListener(handler); // older Safari
 }

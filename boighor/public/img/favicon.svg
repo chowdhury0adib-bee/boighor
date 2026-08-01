@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#23402f"/>
+      <stop offset="100%" stop-color="#16281c"/>
+    </linearGradient>
+    <linearGradient id="b" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#d3a12b"/>
+      <stop offset="100%" stop-color="#b0432c"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="64" height="64" rx="14" fill="url(#bg)"/>
+  <!-- Stylised B -->
+  <path d="M21 16 H36 a8 8 0 0 1 8 8 a8 8 0 0 1 -4 6.9 a8.5 8.5 0 0 1 4.5 7.6 a8.5 8.5 0 0 1 -8.5 8.5 H21 Z M29 22 V28 H35 a3 3 0 0 0 0 -6 Z M29 34 V41 H35.5 a3.5 3.5 0 0 0 0 -7 Z"
+        fill="url(#b)"/>
+  <!-- Sparkle accent -->
+  <circle cx="50" cy="14" r="2" fill="#d3a12b"/>
+  <circle cx="54" cy="20" r="1.2" fill="#d3a12b" opacity=".6"/>
+</svg>

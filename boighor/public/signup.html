@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sign Up — BoiGhor</title>
+<meta name="description" content="Create a free BoiGhor account to start buying and selling secondhand books.">
+<meta name="theme-color" content="#16281c">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
+<link rel="apple-touch-icon" href="/img/favicon.svg">
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -37,7 +43,11 @@
     </div>
     <div class="field">
       <label for="password">Password</label>
-      <input type="password" id="password" required minlength="6">
+      <input type="password" id="password" required minlength="6" autocomplete="new-password">
+      <div class="pw-strength" id="pwStrength" hidden aria-live="polite">
+        <div class="pw-strength-bar"><span id="pwStrengthFill"></span></div>
+        <small class="pw-strength-label" id="pwStrengthLabel">Strength: —</small>
+      </div>
     </div>
     <button class="btn" type="submit" style="width:100%; justify-content:center;">Create Account</button>
     <div class="form-msg" id="msg"></div>
@@ -52,11 +62,47 @@
 <script src="/js/common.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
-  await initLayout();
-  document.getElementById('signupForm').addEventListener('submit', async (e) => {
+  const user = await initLayout();
+  if (user) { window.location.href = '/dashboard.html'; return; }
+
+  const form = document.getElementById('signupForm');
+  const submitBtn = form.querySelector('button[type="submit"]');
+  const pw = document.getElementById('password');
+  const pwWrap = document.getElementById('pwStrength');
+  const pwFill = document.getElementById('pwStrengthFill');
+  const pwLabel = document.getElementById('pwStrengthLabel');
+
+  // ---- Password strength meter (live) ----
+  function scorePassword(s) {
+    if (!s) return 0;
+    let score = 0;
+    if (s.length >= 8)  score++;
+    if (s.length >= 12) score++;
+    if (/[A-Z]/.test(s)) score++;
+    if (/[a-z]/.test(s)) score++;
+    if (/[0-9]/.test(s)) score++;
+    if (/[^A-Za-z0-9]/.test(s)) score++;
+    return Math.min(4, score); // 0..4
+  }
+  const labels = ['Very weak', 'Weak', 'Fair', 'Good', 'Strong'];
+  pw.addEventListener('input', () => {
+    const v = pw.value;
+    if (!v) { pwWrap.hidden = true; return; }
+    pwWrap.hidden = false;
+    const s = scorePassword(v);
+    pwFill.style.width = ((s / 4) * 100) + '%';
+    pwFill.dataset.level = s;
+    pwWrap.dataset.level = s;
+    pwLabel.textContent = 'Strength: ' + labels[s];
+  });
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const msg = document.getElementById('msg');
     msg.className = 'form-msg';
+    submitBtn.disabled = true;
+    const original = submitBtn.textContent;
+    submitBtn.textContent = 'Creating account…';
     try {
       await api('/api/auth/signup', {
         method: 'POST',
@@ -65,13 +111,16 @@ document.addEventListener('DOMContentLoaded', async () => {
           email: document.getElementById('email').value,
           university: document.getElementById('university').value,
           phone: document.getElementById('phone').value,
-          password: document.getElementById('password').value
+          password: pw.value
         })
       });
-      window.location.href = '/';
+      toast('Welcome to BoiGhor!', 'success');
+      setTimeout(() => { window.location.href = '/'; }, 400);
     } catch (err) {
       msg.textContent = err.message;
       msg.classList.add('error');
+      submitBtn.disabled = false;
+      submitBtn.textContent = original;
     }
   });
 });

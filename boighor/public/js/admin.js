@@ -12,6 +12,18 @@ async function loadStats() {
 async function loadUsers() {
   const { users } = await api('/api/admin/users');
   const el = document.getElementById('tab-users');
+  if (!users.length) {
+    el.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-illus">
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </div>
+        <h3>No students yet</h3>
+        <p>Once students sign up, they'll show up here.</p>
+      </div>
+    `;
+    return;
+  }
   el.innerHTML = `
     <table>
       <thead><tr><th>Name</th><th>Email</th><th>University</th><th>Role</th><th>Joined</th><th>Actions</th></tr></thead>
@@ -55,6 +67,18 @@ async function loadUsers() {
 async function loadListings() {
   const { books } = await api('/api/admin/books');
   const el = document.getElementById('tab-listings');
+  if (!books.length) {
+    el.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-illus">
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        </div>
+        <h3>No listings yet</h3>
+        <p>Students haven't listed any books yet.</p>
+      </div>
+    `;
+    return;
+  }
   el.innerHTML = `
     <table>
       <thead><tr><th>Title</th><th>Seller</th><th>Price</th><th>Status</th><th>Listed</th><th>Actions</th></tr></thead>

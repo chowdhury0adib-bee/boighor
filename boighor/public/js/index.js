@@ -69,17 +69,44 @@ function readFilters() {
 
 // ---------- Hero stats (counts the catalog) ----------
 async function loadHeroStats() {
+  // Default values so nothing renders as an em-dash even if the API call fails.
+  const setStat = (id, n) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = n > 0 ? String(n) : '0';
+  };
+  const setTrust = (booksN, sellersN) => {
+    // Pluralization: "1 student" vs "N students", "1 listing" vs "N listings"
+    const sellerLabel = sellersN === 1 ? 'student' : 'students';
+    const listLabel   = booksN   === 1 ? 'listing'  : 'listings';
+    const trustEl = document.getElementById('heroTrustStudents');
+    if (trustEl) trustEl.textContent = `Trusted by ${sellersN} ${sellerLabel}`;
+    const acrossEl = document.getElementById('heroTrustListings');
+    if (acrossEl) {
+      acrossEl.innerHTML = `across <span id="heroStatBooks">${booksN}</span> active ${listLabel} \u2014 list yours in 60 seconds`;
+    }
+  };
+
   try {
     const data = await api('/api/books');
     const books = data.books || [];
-    const total = books.length;
-    const available = books.filter(b => b.status === 'available').length;
+    const total   = books.length;
     const sellers = new Set(books.map(b => b.seller_id)).size;
-    const booksEl   = document.getElementById('heroStatBooks');
-    const studentsEl = document.getElementById('heroStatStudents');
-    if (booksEl)    booksEl.textContent    = total > 0 ? total : '0';
-    if (studentsEl) studentsEl.textContent = sellers > 0 ? sellers : '0';
-  } catch (e) { /* non-fatal — leave placeholders */ }
+    // Numeric stat row (bottom of hero)
+    setStat('heroStatBooksNum',    total);
+    setStat('heroStatStudentsNum', sellers);
+    // Numeric values used inside the trust strip
+    setStat('heroStatBooks',    total);
+    setStat('heroStatStudents', sellers);
+    // Trust strip sentences (with pluralization)
+    setTrust(total, sellers);
+  } catch (e) {
+    // Non-fatal — fall back to "0" everywhere so nothing reads as "—"
+    setStat('heroStatBooksNum',    0);
+    setStat('heroStatStudentsNum', 0);
+    setStat('heroStatBooks',       0);
+    setStat('heroStatStudents',    0);
+    setTrust(0, 0);
+  }
 }
 
 // ---------- "Showing X books" meta line ----------

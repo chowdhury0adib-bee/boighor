@@ -60,7 +60,36 @@ function renderHero(user) {
 
 function setKpi(id, value) {
   const el = document.getElementById(id);
-  if (el) el.textContent = value;
+  if (!el) return;
+  // Count-up for integers; plain set otherwise (e.g. "৳1,200").
+  const asNum = Number(String(value).replace(/[^\d.-]/g, ''));
+  if (Number.isFinite(asNum) && !Number.isNaN(asNum) && /^\d+$/.test(String(value).replace(/[^\d]/g, '')) && asNum > 0 && asNum < 1e7) {
+    animateCount(el, asNum, value);
+  } else {
+    el.textContent = value;
+    const card = el.closest('.kpi');
+    if (card) { card.classList.remove('pop-in'); void card.offsetWidth; card.classList.add('pop-in'); }
+  }
+}
+
+// Smooth count-up. Honors prefers-reduced-motion via duration=0.
+function animateCount(el, target, finalText, duration = 700) {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.textContent = finalText; return;
+  }
+  const start = Number(el.textContent.replace(/[^\d.-]/g, '')) || 0;
+  const t0 = performance.now();
+  function tick(now) {
+    const t = Math.min(1, (now - t0) / duration);
+    // ease-out-cubic
+    const eased = 1 - Math.pow(1 - t, 3);
+    const v = Math.round(start + (target - start) * eased);
+    el.textContent = v.toLocaleString();
+    // Re-add the prefix/suffix (e.g. "৳1,200") by recombining on completion
+    if (t < 1) requestAnimationFrame(tick);
+    else el.textContent = finalText;
+  }
+  requestAnimationFrame(tick);
 }
 function setTrend(id, text, dir = '') {
   const el = document.getElementById(id);

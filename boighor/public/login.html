@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login — BoiGhor</title>
+<meta name="description" content="Log in to BoiGhor — the secondhand book marketplace for students.">
+<meta name="theme-color" content="#16281c">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
+<link rel="apple-touch-icon" href="/img/favicon.svg">
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -41,11 +47,23 @@
 <script src="/js/common.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
-  await initLayout();
-  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  const user = await initLayout();
+  // Already logged in? Skip to dashboard.
+  if (user) {
+    window.location.href = user.role === 'admin' ? '/admin.html' : '/dashboard.html';
+    return;
+  }
+
+  const form = document.getElementById('loginForm');
+  const submitBtn = form.querySelector('button[type="submit"]');
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const msg = document.getElementById('msg');
     msg.className = 'form-msg';
+    submitBtn.disabled = true;
+    const original = submitBtn.textContent;
+    submitBtn.textContent = 'Logging in…';
     try {
       const { user } = await api('/api/auth/login', {
         method: 'POST',
@@ -58,6 +76,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (err) {
       msg.textContent = err.message;
       msg.classList.add('error');
+      submitBtn.disabled = false;
+      submitBtn.textContent = original;
     }
   });
 });

@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sell a Book — BoiGhor</title>
+<meta name="description" content="List your used textbooks on BoiGhor — the student-to-student marketplace.">
+<meta name="theme-color" content="#16281c">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
+<link rel="apple-touch-icon" href="/img/favicon.svg">
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -50,7 +56,12 @@
     </div>
     <div class="field">
       <label for="price">Price (Tk) *</label>
-      <input type="number" id="price" min="0" required>
+      <input type="number" id="price" min="0" step="1" required>
+      <div class="price-preview" id="pricePreview" hidden>
+        <span class="pp-label">A buyer will see</span>
+        <span class="pp-amount" id="pricePreviewAmount">Tk 0</span>
+        <span class="pp-hint" id="pricePreviewHint">— a fair secondhand price</span>
+      </div>
     </div>
     <div class="field">
       <label for="description">Description</label>
@@ -100,6 +111,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     previewImg.src = '';
     previewWrap.hidden = true;
     previewWrap.classList.remove('pop-in');
+  });
+
+  // ---- Price preview ----
+  const priceInput = document.getElementById('price');
+  const pricePreview = document.getElementById('pricePreview');
+  const pricePreviewAmount = document.getElementById('pricePreviewAmount');
+  const pricePreviewHint = document.getElementById('pricePreviewHint');
+  function fmtTk(n) {
+    return 'Tk ' + Number(n).toLocaleString('en-BD', { maximumFractionDigits: 0 });
+  }
+  function priceHintFor(p) {
+    if (p <= 0)     return '— a fair secondhand price';
+    if (p < 100)    return '— affordable for most students';
+    if (p < 300)    return '— a fair secondhand price';
+    if (p < 800)    return '— mid-range, takes longer to sell';
+    if (p < 1500)   return '— premium price, expect fewer buyers';
+    return '— listed for premium buyers only';
+  }
+  priceInput.addEventListener('input', () => {
+    const v = Number(priceInput.value);
+    if (!v || v <= 0) { pricePreview.hidden = true; return; }
+    pricePreview.hidden = false;
+    pricePreviewAmount.textContent = fmtTk(v);
+    pricePreviewHint.textContent = priceHintFor(v);
   });
 
   // ---- Submit ----

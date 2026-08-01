@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page not found — BoiGhor</title>
+  <meta name="description" content="The page you're looking for has wandered off the shelf. Head back to browse listings.">
+  <meta name="theme-color" content="#16281c">
+  <link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
+  <link rel="apple-touch-icon" href="/img/favicon.svg">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* Page-local: keep small. Reuse layout tokens. */
+    body { min-height: 100vh; display: flex; flex-direction: column; }
+    .notfound {
+      flex: 1;
+      display: flex; align-items: center; justify-content: center;
+      padding: var(--sp-8, 32px) var(--sp-4, 16px);
+    }
+    .notfound-card {
+      max-width: 560px; width: 100%; text-align: center;
+      padding: var(--sp-10, 48px) var(--sp-6, 24px);
+      background: var(--paper-light, #faf6ec);
+      border: 1px solid var(--line-soft, rgba(0,0,0,.06));
+      border-radius: 20px;
+      box-shadow: 0 24px 60px -28px rgba(22, 40, 28, .22);
+    }
+    .notfound-art {
+      display: flex; align-items: center; justify-content: center;
+      width: 140px; height: 140px;
+      margin: 0 auto var(--sp-5, 20px);
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #faf6ec, #e6dcc3);
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.06), 0 6px 16px -8px rgba(22,40,28,.2);
+    }
+    .notfound-num {
+      font-family: 'Georgia', serif;
+      font-size: 64px; font-weight: 700;
+      background: linear-gradient(135deg, var(--mustard, #d3a12b), var(--rust, #b0432c));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      line-height: 1;
+    }
+    .notfound h1 {
+      font-size: 1.5rem; margin: 0 0 var(--sp-2, 8px);
+      color: var(--green-deep, #16281c);
+    }
+    .notfound p {
+      margin: 0 0 var(--sp-6, 24px);
+      color: rgba(22,40,28,.7);
+      line-height: 1.55;
+    }
+    .notfound-actions {
+      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    }
+    .notfound-foot {
+      margin-top: var(--sp-5, 20px);
+      font-size: .8rem;
+      color: rgba(22,40,28,.5);
+    }
+  </style>
+</head>
+<body>
+
+<header class="site"><div class="wrap" id="siteNav"></div></header>
+
+<main class="notfound">
+  <div class="notfound-card">
+    <div class="notfound-art" aria-hidden="true">
+      <span class="notfound-num">404</span>
+    </div>
+    <h1>This page wandered off the shelf</h1>
+    <p>The page you're looking for doesn't exist, was moved, or the link has a typo. Try heading back to the marketplace.</p>
+    <div class="notfound-actions">
+      <a href="/" class="btn primary">← Back to Browse</a>
+      <a href="/sell.html" class="btn secondary">List a Book</a>
+    </div>
+    <div class="notfound-foot">
+      Lost? <a href="/dashboard.html" style="color:var(--rust,#b0432c); font-weight:600;">Go to your dashboard</a>
+    </div>
+  </div>
+</main>
+
+<footer class="site"><div class="wrap" id="siteFooter"></div></footer>
+
+<script src="/js/common.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    await initLayout();
+  });
+</script>
+</body>
+</html>
