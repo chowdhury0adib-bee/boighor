@@ -10,6 +10,12 @@ const reviewRoutes = require('./routes/reviews');
 const wishlistRoutes = require('./routes/wishlist');
 const adminRoutes = require('./routes/admin');
 
+// Importing `./db/database` runs schema creation + admin seeding as a
+// side-effect. The shared SQLite handle is re-used by the route modules
+// and by `db/seed.js`, so we don't open a second handle here.
+require('./db/database');
+const { seedDatabase } = require('./db/seed');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -152,7 +158,22 @@ function escapeXml(s) {
   ));
 }
 
-app.listen(PORT, () => {
-  console.log(`BoiGhor server running -> http://localhost:${PORT}`);
-  console.log(`Environment: ${NODE_ENV}`);
-});
+// ---- Auto-seed sample books on first boot ----
+// On Render (ephemeral disk) every fresh deployment starts with an empty DB.
+// On local dev the count check makes this a no-op once books exist.
+// If seeding fails for any reason we still start the server so existing
+// APIs remain reachable.
+async function start() {
+  try {
+    await seedDatabase();
+  } catch (err) {
+    console.error('[seed] failed during startup:', err.message);
+  }
+
+  app.listen(PORT, () => {
+    console.log(`BoiGhor server running -> http://localhost:${PORT}`);
+    console.log(`Environment: ${NODE_ENV}`);
+  });
+}
+
+start();
