@@ -356,41 +356,91 @@ function setupNavScroll() {
 function renderFooter() {
   const f = document.getElementById('siteFooter');
   if (!f) return;
+  const year = new Date().getFullYear();
+
+  // Inline SVG social icons (no extra HTTP requests, inherit currentColor)
+  const ico = {
+    facebook:  '<svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.14 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.78-3.9 1.1 0 2.24.2 2.24.2v2.47h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.91h-2.34V22c4.78-.8 8.43-4.94 8.43-9.94z"/></svg>',
+    linkedin:  '<svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.38 4.28 5.47v6.27zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>',
+    github:    '<svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.04c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49.99.11-.77.42-1.3.76-1.6-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.31-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.87.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 12 .3z"/></svg>',
+    email:     '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
+    arrowUp:   '<svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4 L4 11 M10 4 L16 11 M10 4 L10 16"/></svg>'
+  };
+
   f.innerHTML = `
-    <div class="wrap">
+    <div class="footer-aurora" aria-hidden="true"></div>
+    <div class="footer-inner">
       <div class="footer-grid">
         <div class="footer-col footer-brand">
-          <div class="brand" style="margin-bottom:8px;">
+          <a href="/" class="footer-brand-link" aria-label="BoiGhor home">
             <span class="brand-mark">B</span>
-            <span class="brand-text" style="color:var(--paper);">BoiGhor<small style="color:var(--mustard);">student books</small></span>
-          </div>
-          <p>A secondhand marketplace built for students. Buy cheap textbooks, sell what you've finished — keep knowledge circulating.</p>
+            <span class="brand-text">BoiGhor<small>student books</small></span>
+          </a>
+          <p class="footer-tagline">Bangladesh&rsquo;s Student Book Marketplace</p>
+          <p class="footer-blurb">A secondhand marketplace built for students. Buy cheap textbooks, sell what you&rsquo;ve finished &mdash; keep knowledge circulating.</p>
+          <a class="footer-cta" href="/sell.html">
+            <span>Sell your book</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
         </div>
+
         <div class="footer-col">
-          <h4>Marketplace</h4>
-          <a href="/">Browse Books</a>
-          <a href="/sell.html">Sell a Book</a>
-          <a href="/signup.html">Create Account</a>
+          <h4>Navigation</h4>
+          <span class="footer-divider" aria-hidden="true"></span>
+          <ul class="footer-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/#books">Browse Books</a></li>
+            <li><a href="/sell.html">Sell Book</a></li>
+            <li><a href="/dashboard.html">Dashboard</a></li>
+            <li><a href="/dashboard.html#wishlist">Wishlist</a></li>
+          </ul>
         </div>
+
         <div class="footer-col">
-          <h4>Account</h4>
-          <a href="/login.html">Login</a>
-          <a href="/dashboard.html">Dashboard</a>
-          <a href="/dashboard.html#wishlist">Wishlist</a>
+          <h4>Support</h4>
+          <span class="footer-divider" aria-hidden="true"></span>
+          <ul class="footer-links">
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#privacy">Privacy Policy</a></li>
+            <li><a href="#terms">Terms of Service</a></li>
+          </ul>
         </div>
-        <div class="footer-col">
-          <h4>About</h4>
-          <a href="#">How it works</a>
-          <a href="#">Trust &amp; safety</a>
-          <a href="#">Contact</a>
+
+        <div class="footer-col footer-social-col">
+          <h4>Connect</h4>
+          <span class="footer-divider" aria-hidden="true"></span>
+          <ul class="footer-social" aria-label="Social links">
+            <li><a href="https://facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">${ico.facebook}<span>Facebook</span></a></li>
+            <li><a href="https://linkedin.com/"   target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">${ico.linkedin}<span>LinkedIn</span></a></li>
+            <li><a href="https://github.com/"     target="_blank" rel="noopener noreferrer" aria-label="GitHub">${ico.github}<span>GitHub</span></a></li>
+            <li><a href="mailto:hello@boighor.com" aria-label="Email us">${ico.email}<span>Email</span></a></li>
+          </ul>
         </div>
       </div>
+
       <div class="footer-bottom">
-        <span>&copy; ${new Date().getFullYear()} BoiGhor. Built by students, for students.</span>
-        <span>v1.0 · Made with ♥ in Bangladesh</span>
+        <span class="footer-copy">&copy; <span id="footerYear">${year}</span> BoiGhor. All rights reserved.</span>
+        <span class="footer-made">Made with <span aria-hidden="true">❤️</span> for Students</span>
+        <button type="button" class="footer-top" id="footerBackToTop" aria-label="Back to top">
+          ${ico.arrowUp}
+          <span>Back to Top</span>
+        </button>
       </div>
     </div>
   `;
+
+  // Update year if it changes between renders (e.g. clock rollover at midnight).
+  const yearEl = f.querySelector('#footerYear');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  // Inline footer "Back to top" button — smooth scroll to top.
+  const top = f.querySelector('#footerBackToTop');
+  if (top) {
+    top.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
 }
 
 // Loads current user then calls back with it. Every page calls this on load.
