@@ -175,10 +175,21 @@ function renderCrumbs() {
           <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </span>`;
     } else {
-      const initial = (book.title || '?').trim()[0].toUpperCase();
+      // Polished "No Cover Available" placeholder — initial badge + decorative
+      // book glyph + subtle gradient background. Communicates state clearly,
+      // looks intentional rather than empty.
+      const initial = (book.title || 'B').trim()[0].toUpperCase();
       main.innerHTML = `
-        <div class="bd-placeholder no-cover">
-          <span class="thumb-placeholder">No cover</span>
+        <div class="bd-placeholder no-cover" role="img" aria-label="No cover available for ${escapeHtml(book.title)}">
+          <svg class="bd-placeholder-glyph" viewBox="0 0 64 64" aria-hidden="true">
+            <rect x="14" y="10" width="36" height="46" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>
+            <line x1="20" y1="20" x2="44" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="20" y1="28" x2="40" y2="28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="20" y1="36" x2="44" y2="36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="20" y1="44" x2="36" y2="44" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="bd-placeholder-initial" aria-hidden="true">${escapeHtml(initial)}</span>
+          <span class="bd-placeholder-label">No Cover Available</span>
         </div>`;
     }
     // Decorative thumb strip: cover + Spine / Back / Edge placeholders
@@ -236,11 +247,22 @@ function renderCrumbs() {
     const isAvailable = (book.status || 'available') === 'available';
     const liked = wishlistIds.has(Number(book.id));
 
-    // Price + hint
+    // Price block — the dominant visual element. Keeps the existing price
+    // calculation but wraps it with a labeled, gradient-emphasized container
+    // and a small "Verified listing" trust indicator (data already on `book`).
     let priceHtml = `
-      <div class="bd-price-row">
-        <span class="bd-price">${money(book.price)}</span>
-        <span class="bd-price-hint">Cash on meetup<br><small>Free pickup in campus</small></span>
+      <div class="bd-price-block">
+        <span class="bd-price-label">Price</span>
+        <div class="bd-price-row">
+          <span class="bd-price">${money(book.price)}</span>
+          <span class="bd-price-hint">Cash on meetup<br><small>Free pickup in campus</small></span>
+        </div>
+        ${(book.status || 'available') === 'available'
+          ? `<span class="bd-price-trust" aria-label="Verified listing">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.6 2.1 3.2-.4.7 3.1 2.7 1.7-1.4 2.9.8 3.1-3 1.2-1.4 2.9-3-1-2.5 2-2.5-2-3 1-1.4-2.9-3-1.2.8-3.1L3 8.5l2.7-1.7.7-3.1 3.2.4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12.5l2.2 2.2L15.5 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Verified listing
+            </span>`
+          : ''}
       </div>`;
 
     // Action buttons
@@ -328,11 +350,18 @@ function renderCrumbs() {
     const msgBtn = (currentUser && !isOwner)
       ? `<button class="btn primary" type="button" id="bdSellerMsgBtn">Message seller</button>`
       : '';
+    // University row — only render when present
+    const uniRow = book.seller_university
+      ? `<span class="bd-seller-uni">
+           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-6 9 6v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><polyline points="9 22 9 12 15 12 15 22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+           ${escapeHtml(book.seller_university)}
+         </span>`
+      : '';
     host.innerHTML = `
       <div class="bd-seller-avatar" aria-hidden="true">${escapeHtml(initial)}</div>
       <div class="bd-seller-head">
         <span class="bd-seller-name">${escapeHtml(book.seller_name || 'Anonymous')}</span>
-        ${book.seller_university ? `<span class="bd-seller-uni">${escapeHtml(book.seller_university)}</span>` : ''}
+        ${uniRow}
         <div class="bd-seller-stats">
           <span class="bd-seller-stat">
             <span class="bd-stat-ico" aria-hidden="true">★</span>

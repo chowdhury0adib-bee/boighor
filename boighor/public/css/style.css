@@ -2817,28 +2817,61 @@ nav.links .nav-cta:active { transform: translateY(0); }
   display: block;
 }
 .bd-main-img .bd-placeholder {
+  position: relative;
   width: 100%; height: 100%;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   gap: var(--sp-3);
+  padding: var(--sp-6);
   background-image:
     repeating-linear-gradient(45deg, transparent 0 12px, rgba(35,64,47,0.05) 12px 24px),
     linear-gradient(135deg, var(--paper-dark) 0%, var(--paper) 100%);
   color: var(--ink-faint);
   font-family: 'Lora', serif;
   font-style: italic;
+  overflow: hidden;
 }
+/* Polished "No Cover Available" placeholder — layered behind a soft radial
+   glow, a decorative book glyph, and a centered initial badge. The label
+   reads in upright Inter so it stays legible at a glance. */
 .bd-main-img .bd-placeholder.no-cover {
   background-image:
-    repeating-linear-gradient(45deg, transparent 0 12px, rgba(35,64,47,0.05) 12px 24px),
+    radial-gradient(ellipse at 50% 40%, rgba(211,161,43,0.10) 0%, transparent 60%),
     linear-gradient(135deg, var(--paper-dark) 0%, var(--paper) 100%);
+  color: var(--ink-soft);
+}
+.bd-main-img .bd-placeholder.no-cover::before {
+  content: '';
+  position: absolute; inset: var(--sp-4);
+  border: 1px dashed rgba(35,64,47,0.18);
+  border-radius: var(--radius);
+  pointer-events: none;
+}
+.bd-main-img .bd-placeholder-glyph {
+  width: 64px; height: 64px;
+  color: var(--green-deep);
+  opacity: 0.22;
+  margin-bottom: var(--sp-1);
+  flex-shrink: 0;
 }
 .bd-main-img .bd-placeholder-initial {
-  font-size: 4rem;
+  font-family: 'Lora', serif;
+  font-size: clamp(3rem, 7vw, 4.5rem);
   font-weight: 700;
+  line-height: 1;
   color: var(--green-deep);
-  opacity: .35;
+  opacity: .55;
   font-style: normal;
+  letter-spacing: -0.02em;
+}
+.bd-main-img .bd-placeholder-label {
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 .bd-main-img .bd-zoom-ico {
   position: absolute;
@@ -3005,6 +3038,32 @@ nav.links .nav-cta:active { transform: translateY(0); }
   height: 4px;
   background: linear-gradient(90deg, var(--green-deep) 0%, var(--mustard) 100%);
 }
+.bd-price-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--line-soft);
+  position: relative;
+}
+.bd-price-block::after {
+  /* Tiny mustard accent underline beneath the divider — signals "this is
+     the price block" without competing with the price text itself. */
+  content: '';
+  position: absolute;
+  left: 0; bottom: -1px;
+  width: 32px; height: 2px;
+  background: var(--mustard);
+  border-radius: 1px;
+}
+.bd-price-label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
 .bd-price-row {
   display: flex;
   align-items: baseline;
@@ -3014,7 +3073,7 @@ nav.links .nav-cta:active { transform: translateY(0); }
 }
 .bd-price {
   font-family: 'Lora', serif;
-  font-size: clamp(1.8rem, 3vw, 2.2rem);
+  font-size: clamp(2rem, 4vw, 2.6rem);
   font-weight: 700;
   color: var(--green-deep);
   line-height: 1;
@@ -3024,6 +3083,23 @@ nav.links .nav-cta:active { transform: translateY(0); }
   font-size: var(--fs-xs);
   color: var(--ink-faint);
   text-align: right;
+}
+.bd-price-trust {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green-deep);
+  margin-top: 2px;
+}
+.bd-price-trust svg {
+  width: 14px; height: 14px;
+  color: var(--mustard);
+  flex-shrink: 0;
 }
 
 .bd-action-row {
@@ -3201,8 +3277,17 @@ nav.links .nav-cta:active { transform: translateY(0); }
 }
 .bd-seller-name:hover { color: var(--green-deep); }
 .bd-seller-uni {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: var(--fs-sm);
   color: var(--ink-faint);
+}
+.bd-seller-uni svg {
+  width: 14px; height: 14px;
+  flex-shrink: 0;
+  color: var(--green-soft);
+  opacity: 0.85;
 }
 .bd-seller-stats {
   display: flex;
